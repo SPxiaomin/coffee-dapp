@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-da275d3e8b6fb951ad73bfcff3a450986e615ecc",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/BuyMeACoffee.sol": "project/contracts/BuyMeACoffee.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/BuyMeACoffee.sol": {
+        "content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.28;\n\ncontract BuyMeACoffee {\n    // Equivalent to a Type or Interface in TS\n    struct Memo {\n        address from;\n        uint256 timestamp;\n        string name;\n        string message;\n    }\n\n    // A list to store all the tips we receive (Our \"Databaes\")\n    Memo[] memos;\n\n    // Address of the contract owner (You!)\n    address payable public owner;\n\n    constructor() {\n        owner = payable(msg.sender); // The person who deploys the contract\n    }\n\n    // Function to buy a coffee\n    function buyCoffee(string memory _name, string memory _message) public payable {\n        // Require that the tip is more than 0\n        require(msg.value > 0, \"Can't buy coffee with 0 eth!\");\n\n        // add the memo to the list\n        memos.push(Memo(msg.sender, block.timestamp, _name, _message));\n    }\n\n    // Function to withdraw the funds to your wallet\n    function withdrawTips() public {\n        require(msg.sender == owner, \"Only the owner can withdraw.\");\n        owner.transfer(address(this).balance);\n    }\n\n    // Function to get all the memos\n    function getMemos() public view returns (Memo[] memory) {\n        return memos;\n    }\n}"
+      }
+    }
+  }
+}
